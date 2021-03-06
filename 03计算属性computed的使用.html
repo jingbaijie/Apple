@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <p>最初的模样：{{message}}</p>
+        <p>计算之后：{{reversedMessage}}</p>
+        <p>计算之后：{{reversedMessage2()}}</p>
+        <p>当前时间：{{now}}</p>
+        <p>fullName:{{fullName}}</p>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script>
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                message: "xujie",
+                firstName: "vue",
+                lastName: "hello"
+            },
+            computed: {
+                reversedMessage: function () {
+                    return this.message.split("").reverse().join("");
+                },
+                now: function () {
+                    return Date.now()
+                },
+                fullName: {
+                    set: function (value) {
+                        var arr = value.split(" ");
+                        this.firstName = arr[0];
+                        this.lastName = arr[1];
+                    },
+                    get: function () {
+                        return this.firstName + "" + this.lastName;
+                    }
+                }
+            },
+            methods: {
+                reversedMessage2: function () {
+                    return this.message.split("").reverse().join("");
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

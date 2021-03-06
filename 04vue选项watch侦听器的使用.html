@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <p>今日温度：{{deg}}℃</p>
+        <p>穿衣指数：今日宜穿{{clothes}}</p>
+        <input type="button" value="＋" @click="add">&nbsp;&nbsp;&nbsp;<input type="button" value="－" @click="reduce">
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script>
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                clothes:"夹克",
+                deg:20
+            },
+            methods:{
+                add:function(){
+                    this.deg++;
+                },
+                reduce:function(){
+                    this.deg--;
+                }
+            },
+            watch:{
+                //newValue当前最新的值
+                //oldValue上一次的值
+                deg:function(newValue,oldValue){
+                    if(newValue>26){
+                        this.clothes="衬衫";
+                    }else if(newValue>=0&&newValue<=26){
+                        this.clothes="夹克";
+                    }else{
+                        this.clothes="棉袄";
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

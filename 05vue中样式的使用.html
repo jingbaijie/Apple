@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <p :class="currentClass" class="origin">搞不懂啊</p>
+        <p :class="[active?hahaha:'',hehhe]">金海国际</p>
+        <p :style="[activeColor,fontSize]">{{hahaha}}or{{hehhe}}</p>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script>
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                active: true,
+                hasError: false,
+                isdanger: true,
+                hahaha: "yes",
+                hehhe: "no",
+                activeColor:{
+                    color:"red"
+                },
+                fontSize:{
+                    "font-size":"30px"
+                }
+            },
+            computed: {
+                currentClass: function () {
+                    return {
+                        aaa: this.active && this.hasError,
+                        "b-b": !this.hasError && this.isdanger
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <button v-on:click="greet">哈哈</button>
+        <div v-on:click="dothat">
+            <a v-on:click.stop="dothis">hahaha</a>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script>
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                name: "vue.js"
+            },
+            methods: {
+                greet: function (event) {
+                    if (event) {
+                        console.log(event);
+                    }
+                },
+                dothis:function(){
+                    console.log(1);
+                },
+                dothat:function(){
+                    console.log(2);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

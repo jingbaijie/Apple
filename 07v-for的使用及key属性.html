@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <ul id="example">
+            <li v-for="(item,index) of items" v-bind:key="item.id">{{index}}----{{item.message}}
+                <input type="checkbox">
+                <div v-for="(num,name,ii) in items[index]">{{ii}}---{{name}}---{{num}}</div>
+            </li>
+        </ul>
+        <button @click="addFun">添加</button>
+        <button @click="deleteFun">删除</button></br>
+        <input type="text" v-model="message" placeholder="message"></br>
+        <input type="text" v-model="hahah" placeholder="hahah"></br>
+        <input type="text" v-model="heheheh" placeholder="heheheh">
+        <ul>
+            <li v-for="(item,index) in newItems">{{item.message}}</li>
+        </ul>
+        <ul v-for="set in sets">
+            <li v-for="n in even(set)">{{n}}</li>
+        </ul>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script>
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                id: "",
+                message: "",
+                hahah: "",
+                heheheh: "",
+                items: [
+                    { id: 1, message: "headache", hahah: "bjhgjhg", heheheh: "adsjhdfieu" },
+                    { id: 2, message: "sore throat", hahah: "jkhjgh", heheheh: "nkjhxjcgbjhd" }
+                ],
+                sets: [[1, 2, 3, 4, 5], [6, 7, 8, 9, 10]]
+            },
+            methods: {
+                addFun: function () {
+                    var addItem = { id: this.items.length + 1, message: this.message, hahah: this.hahah, heheheh: this.heheheh }
+                    this.items.push(addItem);
+                },
+                deleteFun: function () {
+                    this.items.shift(0, 1);
+                    return this.items;
+                },
+                even:function(numbres){
+                    return numbres.filter(function(number){
+                        return number%2 ===0;
+                    })
+                }
+            },
+            computed: {
+                newItems: function () {
+                    return this.items.filter(function (item) {
+                        return item.message.match(/h/);
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

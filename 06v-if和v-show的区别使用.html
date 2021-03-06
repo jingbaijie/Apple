@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <!-- visibility隐藏，元素还在，在文档流中占位 -->
+        <div style="visibility: hidden;">hahahh</div>
+        <!-- 元素切换删除 -->
+        <p v-if="message1">hahhahaha</p>
+        <p v-else-if="message2">保护机构</p>
+        <!-- 加了display:none,元素还在，在文档流中不占位 -->
+        <p v-show="message2">东北师范干坏事大嫁风尚</p>
+        <template v-if="message1">
+            <h1>title</h1>
+            <h2>article</h2>
+            <h3>paragraph</h3>
+        </template>
+        <div v-if="loginType=='userName'">
+            <label>userName</label>
+            <input type="text" placeholder="请输入账号" key="userName">
+        </div>
+        <div v-else="loginType=='email'">
+            <label>email</label>
+            <input type="text" placeholder="请输入邮箱" key="email">
+        </div>
+        <button @click="changeLoginType">切换loginType</button>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script>
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                message1: true,
+                message2: true,
+                loginType: "userName",
+            },
+            methods: {
+                changeLoginType: function () {
+                    if (this.loginType == "userName") {
+                        this.loginType = "email";
+                    } else {
+                        this.loginType = "userName"
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
