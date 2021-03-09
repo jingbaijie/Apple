@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <!-- 文本绑定 -->
+        <input type="text" placeholder="edit me" v-model="message">
+        <p>Message is:{{message}}</p>
+        <!-- 多行文本 -->
+        <textarea v-model="message"></textarea><br/>
+        <!-- 单个复选框 -->
+        <input type="checkbox" id="checkbox" v-model="checked">
+        <label for="checkbox">复选框的值{{checked}}</label><br/>
+        <!-- 多个复选框 -->
+        <input type="checkbox" v-model="checkedNames" id="jack" value="jack">
+        <label for="jack">jack</label>
+        <input type="checkbox" v-model="checkedNames" id="mike" value="mike">
+        <label for="mike">mike</label>
+        <input type="checkbox" v-model="checkedNames" id="john" value="john">
+        <label for="john">john</label>
+        <p>checkedNames:{{checkedNames}}</p>
+        <!-- 单选按钮 -->
+        <input type="radio" v-model="picked" id="one" value="one">
+        <label for="one">one</label>
+        <input type="radio" v-model="picked" id="two" value="two">
+        <label for="two">two</label>
+        <p>picked：{{picked}}</p>
+        <!-- 下拉选择框 (单选)-->
+        <select v-model="selected">
+            <option value="" disabled>请选择</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+        </select>
+        <p>selected:{{selected}}</p>
+        <!-- 下拉选择框（多选） -->
+        <select v-model="multipleSelected" multiple >
+            <option value="a">a</option>
+            <option value="b">b</option>
+            <option value="c">c</option>
+        </select>
+        <p>multipleSelected:{{multipleSelected}}</p>
+        <!-- 用v-for渲染动态选项 -->
+        <select v-model="vForSelected">
+            <option  v-for="option in options" v-bind:value="option.value">{{option.text}}</option>
+        </select>
+        <p>vForSelected:{{vForSelected}}</p>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script>
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                message:"hahha",
+                checked:true,
+                checkedNames:[],
+                picked:"",
+                selected:"",
+                multipleSelected:[],
+                vForSelected:"A",
+                options:[
+                    {text:"A",value:"A"},
+                    {text:"B",value:"B"},
+                    {text:"C",value:"C"}
+                ]                
+            }
+        });
+    </script>
+</body>
+</html>
