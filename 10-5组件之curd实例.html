@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        td {
+            border: 1px solid #333333;
+            width: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        search:
+        <input type="text" v-model="keywords">
+        <table>
+            <tr>
+                <th v-for="column in columns">{{column}}</th>
+                <th>delete</th>
+            </tr>
+            <tr v-for="(person,index) in people">
+                <td v-for="(property,key) in person">{{person[key]}}</td>
+                <td><button @click="deleteItem(index)">delete</button></td>
+            </tr>
+        </table>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script>
+        var demo = new Vue({
+            el: "#app",
+            data: {
+                keywords: "",
+                columns: ["Name", "Age", "Sex"],
+                people: [{
+                    name: 'ST',
+                    age: 100,
+                    sex: 'Female'
+                }, {
+                    name: 'QF',
+                    age: 30,
+                    sex: 'Male'
+                }, {
+                    name: 'WF',
+                    age: 6,
+                    sex: 'Male'
+                }, {
+                    name: 'YFR',
+                    age: 26,
+                    sex: 'Male'
+                }]
+            },
+            methods: {
+                deleteItem: function (index) {
+                    this.people.splice(this.people[index],1);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <button @click="showChildComponentData1">$children</button>
+        <button @click="showChildComponentData2">$refs</button>
+        <my-component v-ref:cc1>
+            <p>哈哈哈哈哈哈</p>
+        </my-component>
+        <model-dialog v-bind:dialog-show.sync="show" v-show="show" v-ref:cc2>
+            <h1 slot="header">提示信息</h1>
+            <div slot="body">
+                <p>你想在对话框中放什么内容都可以！</p>
+                <p>你可以放一段文字，也可以放一些表单，或者是一些图片。</p>
+            </div>
+            <footer slot="footer">
+                <button @click="close">关闭</button>
+            </footer>
+        </model-dialog>
+        <button @click="open">打开对话框</button>
+    </div>
+    <template id="mycomponent">
+        <div>
+            <h2>{{msg}}</h2>
+            <!-- 匿名slot -->
+            <slot>如果没有分发内容就显示slot中的内容</slot>
+            <p>say something...</p>
+        </div>
+    </template>
+    <template id="dialogModel">
+        <div>
+            <button @click="closeDialog">close</button>
+            <slot name="header"></slot>
+            <slot name="body"></slot>
+            <slot name="footer"></slot>
+        </div>
+    </template>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script>
+        var demo = new Vue({
+            el: "#app",
+            data: {
+                show: false
+            },
+            methods: {
+                close: function () {
+                    this.show = false;
+                },
+                open: function () {
+                    this.show = true;
+                },
+                showChildComponentData1: function () {
+                    for (var i = 0; i < this.$children.length; i++) {
+                        alert(this.$children[i].msg);
+                    }
+                },
+                showChildComponentData2: function () {
+                    alert(JSON.stringify(this.$refs));
+                }
+            },
+            components: {
+                "my-component": {
+                    template: "#mycomponent",
+                    data: function () {
+                        return {
+                            msg: "this is mycomponent1111!"
+                        }
+                    }
+                },
+                "model-dialog": {
+                    template: "#dialogModel",
+                    props: ["dialogShow"],
+                    data: function () {
+                        return {
+                            msg: "this is mycomponent2222!"
+                        }
+                    },
+                    methods: {
+                        closeDialog: function () {
+                            this.dialogShow = false;
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

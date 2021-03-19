@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <div id="searchBar">
+            search <input type="text" v-model="searchQuery">
+        </div>
+        <simple-template v-bind:columns="gridColumns" v-bind:datas="gridData" v-bind:filter-key="searchQuery"></simple-template>
+    </div>
+    <template id="templateId">
+        <table>
+            <thead>
+                <tr>
+                    <th v-for="column in columns" @click="clickHim">
+                        {{column}}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="data in datas">
+                    <td v-for="column in columns">
+                        {{data[column]}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </template>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script>
+        Vue.component("simple-template", {
+            template: "#templateId",
+            props: { datas: Array, columns: Array, filterKey: String },
+            methods:{
+                clickHim:function(){
+                    alert(this.columns[0]);
+                }
+            }
+        });
+        var demo = new Vue({
+            el: "#app",
+            data: {
+                searchQuery: '',
+                gridColumns: ['name', 'age', 'sex'],
+                gridData: [{
+                    name: 'Jack',
+                    age: 30,
+                    sex: 'Male'
+                }, {
+                    name: 'Bill',
+                    age: 26,
+                    sex: 'Male'
+                }, {
+                    name: 'Tracy',
+                    age: 22,
+                    sex: 'Female'
+                }, {
+                    name: 'Chris',
+                    age: 36,
+                    sex: 'Male'
+                }]
+            }
+        })
+    </script>
+</body>
+
+</html>
