@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <p>{{msg | msgFilter("+1","+2") | msg2Filter}}</p>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        // 先定义过滤器
+        Vue.filter("msgFilter", function (msg,arg,arg2) {
+            return msg.replace(/单纯/g, "善良"+arg+arg2);
+        }); 
+        // 可定义多个过滤器
+        Vue.filter("msg2Filter",function(msg){
+            return msg + "======";
+        }); 
+        var demo = new Vue({
+            el: "#app",
+            data: {
+                msg: "单纯的司藤遇到单纯的秦放，还有同样单纯的颜free"
+            }
+        });            
+    </script>
+</body>
+
+</html>

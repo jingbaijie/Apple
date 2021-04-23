@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- 引入 Bootstrap -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="app">
+        <div>
+            Name:
+            <input type="text" v-model="addName">
+            <button type="button" class="btn btn-primary" @click="add">添加</button>
+        </div>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th v-for="title in columns">{{title}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(item,index) in list" v-key="item.videoCode">
+                    <td>{{item.videoCode}}</td>
+                    <td>{{item.videoCname}}</td>
+                    <td>{{item.createTime}}</td>
+                    <td @click="del(index)" style="cursor: pointer;">删除</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+    <script type="text/javascript">
+        // 如果我们通过全局配置了请求的数据接口根域名，则在每次单独发去http请求时，请求的url路径应该以相对路径开头，前面不能带/,否则不会启用根路径做拼接。
+        Vue.http.options.root = "http://vue.studyit.io/";
+        // 全局配置emulateJSON选项(表单提交数据类型)
+        // vue.http.options.emulateJSON = true;
+        var demo = new Vue({
+            el: "#app",
+            data: {
+                columns: ["ID", "Name", "CTime", "Operation"],
+                addName: "",
+                list: [{
+                    videoCode: 1,
+                    videoCname: "奔驰",
+                    createTime: new Date()
+                },
+                {
+                    videoCode: 2,
+                    videoCname: "宝马",
+                    createTime: new Date()
+                }]
+            },
+            created: function () {
+                this.itemList();
+                this.getList();
+            },
+            methods: {
+                itemList: function () {
+                    this.$http.get('http://112.25.69.5:8192/XuanLi_Cartoon/videoList?action=videoList', { params: { cartoonId: 1992 } }).then(function (res) {
+                        this.list = res.body.list;
+                    }, function (res) {
+                        console.log(res.status);
+                    });
+                },
+                getList: function () {
+                    this.$http.get("api/getprodlist", {}).then(function (res) {
+
+                    }, function (res) {
+
+                    });
+                },
+                add: function () {
+                    this.list.push({
+                        videoCode: this.list.length + 1,
+                        videoCname: this.addName,
+                        createTime: new Date()
+                    });
+                },
+                del: function (index) {
+                    this.list.splice(index, 1);
+                }
+            }
+        });
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="http://apps.bdimg.com/libs/animate.css/3.1.0/animate.min.css">
+    <style>
+        * {
+            list-style: none;
+        }
+
+        /* 进入动画之前和动画结束之后 */
+        /* .v-enter,
+        .v-leave-to {
+            opacity: 0;
+            transform: translateX(100px);
+        } */
+
+        /* 入场动画的时间段和离场动画的时间段 */
+        /* .v-enter-active,
+        .v-leave-active {
+            transition: all 1s ease;
+        } */
+
+        /* 自定义v-前缀 */
+        .my-enter,
+        .my-leave-to {
+            opacity: 0;
+            transform: translateY(100PX);
+        }
+
+        .my-enter-active,
+        .my-leave-active {
+            transition: all 1s ease;
+        }
+
+        /* 小球 */
+        #ball {
+            width: 20px;
+            height: 20px;
+            background: red;
+            border-radius: 50%;
+        }
+
+        /* 列表 */
+        li {
+            border: 1px solid #333333;
+            margin: 5px;
+            padding: 5px;
+            width: 100%;
+        }
+        li:hover{
+            background: skyblue;
+            transition: all 1s ease;
+        }
+
+        .group-enter,
+        .group-leave-to {
+            opacity: 0;
+            transform: translateY(100PX);
+        }
+
+        .group-enter-active,
+        .group-leave-active {
+            transition: all 1s ease;
+        }
+        /* v-move和v-leave-active配合使用，能够实现列表后续的元素，渐渐飘上来的效果 */
+        .group-move{
+            transition: all 1s ease;
+        }
+        .group-leave-active{
+            position: absolute;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <!-- 1、使用过渡类名实现动画:使用transition元素把需要被动画控制的元素包裹起来，transition元素是vue官方提供的 -->
+        <input type="button" value="toggle" @click="flag=!flag">
+        <transition>
+            <h3 v-if="flag">这是一个H3</h3>
+        </transition>
+        <hr />
+        <!-- 2、自定义v-前缀 -->
+        <input type="button" value="toggle2" @click="flag2=!flag2">
+        <transition name="my">
+            <h1 v-if="flag2">这是一个H1</h1>
+        </transition>
+        <hr />
+        <!-- 3、使用第三方animate.css类库实现动画,animated为基础类必须加,使用:duration="{enter:2000,leave:200}来分别设置入场时长和离场时长" -->
+        <!-- 写法一 -->
+        <!-- <input type="button" value="toggle3" @click="flag3=!flag3">
+        <transition enter-active-class="bounceIn" leave-active-class="bounceOut" :duration="2000">
+            <h4 v-if="flag3" class="animated">这是一个H4</h4>
+        </transition> -->
+        <!--写法二 -->
+        <input type="button" value="toggle3" @click="flag3=!flag3">
+        <transition enter-active-class="animated bounceIn" leave-active-class="animated bounceOut"
+            :duration="{enter:2000,leave:200}">
+            <h4 v-if="flag3">这是一个H4</h4>
+        </transition>
+        <hr />
+        <!-- 4、钩子函数实现小球半场动画 -->
+        <input type="button" value="加入购物车" @click="flag4=!flag4">
+        <transition @before-enter="beforeEnter" @enter="enter" @after-enter="afterEnter">
+            <div id="ball" v-if="flag4"></div>
+        </transition>
+        <hr />
+        <!-- 5、使用transition-group元素实现列表动画（添加、删除、appear和tag,tag="ul"指定transition为ul标签，否则默认为span;appear是进入页面动画） -->
+        <!-- 在实现列表过渡的时候，如果需要过渡的元素是通过v-for循环渲染出来的，不能使用transition包裹，需要使用transition-group -->
+        <!-- 如果要为v-for循环创建的元素设置动画，必须为每一个元素设置:key属性 -->
+        id:<input type="text" v-model="id">
+        name:<input type="text" v-model="name">
+        <input type="button" value="添加" @click="add">
+        <transition-group name="group" tag="ul" appear>
+            <li v-for="(item,index) in list" :key="item.id" @click="del(index)">{{item.id}}----{{item.name}}</li>
+        </transition-group>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script type="text/javascript">
+        var demo = new Vue({
+            el: "#app",
+            data: {
+                flag: false,
+                flag2: false,
+                flag3: false,
+                flag4: false,
+                id: "",
+                name: "",
+                list: [{
+                    id: 1,
+                    name: "司藤"
+                }, {
+                    id: 2,
+                    name: "秦放"
+                }, {
+                    id: 3,
+                    name: "颜福瑞"
+                }]
+            },
+            methods: {
+                //第一个动画进入钩子函数beforeEnter,el表示要执行动画的DOM元素，是个原生的JS DOM对象,可以认为是通过document.getElementById("")方式获取到的原生JS DOM对象
+                beforeEnter(el) {
+                    el.style.transform = "translate(0,0)";
+                },
+                // 第二个动画进入钩子函数enter,第二个参数done就是对after-enter的调用
+                enter(el, done) {
+                    el.offsetWidth;
+                    el.style.transform = "translate(150px,450px)";
+                    el.style.transition = "all 0.8s ease";
+                    done();
+                },
+                // 第三个动画进入钩子函数after-enter
+                afterEnter(el) {
+                    this.flag4 = !this.flag4;
+                },
+                add() {
+                    this.list.push({
+                        id: this.id,
+                        name: this.name
+                    });
+                    this.id = this.name = "";
+                },
+                del(index) {
+                    this.list.splice(index,1);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

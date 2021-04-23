@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        姓名：<input type="text" v-model="name" v-focus v-color>
+        年龄：<input type="text" v-model="age">
+    </div>
+    <div id="app2">
+        <p v-fontsize="40" v-fontweight="900">城市：{{city}}</p>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        /* 
+        *自定义全局指令
+        */
+        // 自定义获焦
+        Vue.directive("focus",{
+            bind:function(el){
+                console.log(1);
+                console.log(el);
+            },
+            inserted:function(el){
+                console.log(2);
+                console.log(el);
+                el.focus();
+            },
+            updated:function(){
+
+            }
+        })
+        // 自定义字体颜色
+        Vue.directive("color",{
+            bind:function(el){
+                el.style.color="red";
+            }
+        })
+        var demo = new Vue({
+            el:"#app",
+            data:{
+                name:"",
+                age:""
+            }
+        });
+        var demo2 = new Vue({
+            el:"#app2",
+            data:{
+                city:"南京"
+            },
+            // 定义私有指令
+            directives:{
+                "fontsize":{
+                    bind:function(el,binding){
+                        el.style.fontSize=binding.value+"px";
+                        console.log(binding);
+                    }
+                },
+                "fontweight":function(el,binding){
+                    el.style.fontWeight=binding.value;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

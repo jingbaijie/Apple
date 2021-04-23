@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!--除了vue-resource还可以使用axios的第三方包实现数据请求-->
+    <div id="app">
+        <input type="button" value="get请求" @click="getInfo">
+        <input type="button" value="post请求" @click="postInfo">
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+    <script type="text/javascript">
+        var demo = new Vue({
+            el: "#app",
+            data: {},
+            methods: {
+                getInfo: function () {
+                    var getInfoUrl = "http://122.193.8.108:8091/recommender/movie/getRecommendMovieByMovieId";
+                    var getParams = {
+                        movieId: 1896,
+                        recommendNum: 13,
+                        sortType: 1,
+                        isFree: 1,
+                        booleanUp: 2,
+                        contentId: 3,
+                        times: 1616744999810
+                    }
+                    this.$http.get(getInfoUrl, { params: getParams }).then(function (res) {
+                        console.log(res);
+                    })
+                },
+                postInfo: function () {
+                    this.$http.post("http://vue.studyit.io/api/post", {}, { emulateJSON: true }).then(function (res) {
+                        console.log(res);
+                    })
+                }
+            },
+        });
+    </script>
+</body>
+
+</html>

@@ -8,57 +8,138 @@
     <style>
         td {
             border: 1px solid #333333;
-            width: 100px;
         }
     </style>
 </head>
 
 <body>
     <div id="app">
-        search:
-        <input type="text" v-model="keywords">
+        Id:<input type="text" v-model="id">
+        Name:<input type="text" v-model="name">
+        Age:<input type="text" v-model="age">
+        <!-- 按键修饰符，enter抬起调用添加事件 -->
+        Sex:<input type="text" v-model="sex" @keyUp.enter="addItem">
+        <button @click="addItem">add</button></br>
+        search:<input type="text" v-model="keywords">
         <table>
             <tr>
                 <th v-for="column in columns">{{column}}</th>
                 <th>delete</th>
             </tr>
-            <tr v-for="(person,index) in people">
-                <td v-for="(property,key) in person">{{person[key]}}</td>
-                <td><button @click="deleteItem(index)">delete</button></td>
+            <tr v-for="(person,index) in search(keywords)" v-bind:key="person.id">
+                <td>{{person.id}}</td>
+                <td>{{person.name}}</td>
+                <td>{{person.age}}</td>
+                <td>{{person.sex}}</td>
+                <td>{{person.curTime | timeFormat()}}</td>
+                <td><button @click="deleteItem(person.id)">delete</button></td>
             </tr>
         </table>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <div id="app2">
+        <p>{{dt | timeFormat}}</p>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script>
+        // 全局过滤器
+        Vue.filter("timeFormat", function (msg, pattern) {
+            var dt = new Date(msg);
+            var yyyy = dt.getFullYear();
+            var MM = (dt.getMonth() + 1).toString().padStart(2,0);
+            var dd = dt.getDate().toString().padStart(2,0);
+            if (pattern && pattern.toLowerCase() === "yyyy-mm-dd") {
+                return `${yyyy}-${MM}-${dd}`;
+            } else {
+                // padStart(总位数，从头开始补的数字);
+                // padEnd(总位数，从末尾开始补充的数字);
+                var hh = dt.getHours().toString().padStart(2,0);
+                var mm = dt.getMinutes().toString().padStart(2,0);
+                var ss = dt.getSeconds().toString().padStart(2,0);
+                return `${yyyy}-${MM}-${dd} ${hh}:${mm}:${ss}`
+            }
+        });
         var demo = new Vue({
             el: "#app",
             data: {
                 keywords: "",
-                columns: ["Name", "Age", "Sex"],
+                name: "",
+                age: "",
+                sex: "",
+                id: "",
+                columns: ["Id", "Name", "Age", "Sex", "curTime"],
                 people: [{
+                    id: 1,
                     name: 'ST',
                     age: 100,
-                    sex: 'Female'
+                    sex: 'Female',
+                    curTime: new Date()
                 }, {
+                    id: 2,
                     name: 'QF',
                     age: 30,
-                    sex: 'Male'
+                    sex: 'Male',
+                    curTime: new Date()
                 }, {
+                    id: 3,
                     name: 'WF',
                     age: 6,
-                    sex: 'Male'
+                    sex: 'Male',
+                    curTime: new Date()
                 }, {
+                    id: 4,
                     name: 'YFR',
                     age: 26,
-                    sex: 'Male'
+                    sex: 'Male',
+                    curTime: new Date()
                 }]
             },
             methods: {
                 deleteItem: function (index) {
-                    this.people.splice(this.people[index],1);
+                    console.log(index);
+                    for (var i = 0; i < this.people.length; i++) {
+                        if (index == this.people[i].id) {
+                            this.people.splice(i, 1);
+                        }
+                    }
+                },
+                addItem: function () {
+                    var newItem = { id: this.id, name: this.name, age: this.age, sex: this.sex ,curTime:new Date()};
+                    this.people.push(newItem);
+                },
+                search: function (keywords) {
+                    var newPeople = [];
+                    this.people.filter(function (item) {
+                        if (item.name.indexOf(keywords) != -1 || item.sex.indexOf(keywords) != -1 || JSON.stringify(item.age).indexOf(keywords) != -1) {
+                            newPeople.push(item);
+                        }
+                    });
+                    return newPeople;
                 }
             }
         });
+        var demo2 = new Vue({
+            el: "#app2",
+            data: {
+                dt: new Date()
+            },
+            // 优先使用私有过滤器
+            filters: {
+                "timeFormat": function (msg, pattern) {
+                    var dt = new Date(msg);
+                    var yyyy = dt.getFullYear();
+                    var MM = (dt.getMonth() + 1).toString().padStart(2,0);
+                    var dd = dt.getDate().toString().padStart(2,0);
+                    if (pattern && pattern.toLowerCase() === "yyyy-mm-dd") {
+                        return `${yyyy}-${MM}-${dd}`;
+                    } else {
+                        var hh = dt.getHours().toString().padStart(2,0);
+                        var mm = dt.getMinutes().toString().padStart(2,0);
+                        var ss = dt.getSeconds().toString().padStart(2,0);
+                        return `${yyyy}-${MM}-${dd} ${hh}:${mm}:${ss}~~~~~~~~~~~`
+                    }
+                }
+            }
+        })
     </script>
 </body>
 
